@@ -1,5 +1,9 @@
+import os
 import requests
+
+from dotenv import load_dotenv
 from itertools import count
+
 
 
 languages = [
@@ -63,4 +67,29 @@ def get_hh_salary():
     return result
 
 
-print(get_hh_salary())
+def get_sj_salary():
+    load_dotenv()
+    SJ_KEY = os.environ['SJ_API_KEY']
+    result = {}
+    url = 'https://api.superjob.ru/2.0/vacancies/'
+    header = {'X-Api-App-Id': SJ_KEY}
+    for language in languages:
+        salaries = []
+        for page in count(0):
+            params = {
+                'keyword': language,
+                'town': 'Москва',
+                'catalogues': 48,
+                'page': 0,
+                'count': 100
+            }
+            response = requests.get(url, headers=header, params=params)
+            response.raise_for_status()
+
+            print(response.status_code)
+
+
+
+
+
+print(get_sj_salary())
