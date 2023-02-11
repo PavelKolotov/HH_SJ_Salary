@@ -19,6 +19,15 @@ languages = [
     # 'TypeScript'
 ]
 
+def predict_rub_salary(salary_from, salary_to):
+    if salary_from and salary_to:
+        avg_salary = (salary_from + salary_to) / 2
+    elif not salary_from:
+        avg_salary = salary_to * 0.8
+    else:
+        avg_salary = salary_from * 1.2
+    return avg_salary
+
 
 def get_hh_salary():
     result = {}
@@ -44,12 +53,8 @@ def get_hh_salary():
                 salary = vacancy['salary']
                 if not salary or salary['currency'] != 'RUR':
                     avg_salary = None
-                elif salary['from'] and salary['to']:
-                    avg_salary = (salary['from'] + salary['to']) / 2
-                elif not salary['from']:
-                    avg_salary = salary['to'] * 0.8
                 else:
-                    avg_salary = salary['from'] * 1.2
+                    avg_salary = predict_rub_salary(salary['from'], salary['to'])
                 if avg_salary:
                     salaries.append(avg_salary)
             if page >= pages - 1:
@@ -66,30 +71,30 @@ def get_hh_salary():
 
     return result
 
-
-def get_sj_salary():
-    load_dotenv()
-    SJ_KEY = os.environ['SJ_API_KEY']
-    result = {}
-    url = 'https://api.superjob.ru/2.0/vacancies/'
-    header = {'X-Api-App-Id': SJ_KEY}
-    for language in languages:
-        salaries = []
-        for page in count(0):
-            params = {
-                'keyword': language,
-                'town': 'Москва',
-                'catalogues': 48,
-                'page': 0,
-                'count': 100
-            }
-            response = requests.get(url, headers=header, params=params)
-            response.raise_for_status()
-
-            print(response.status_code)
-
-
-
+#
+# def get_sj_salary():
+#     load_dotenv()
+#     SJ_KEY = os.environ['SJ_API_KEY']
+#     result = {}
+#     url = 'https://api.superjob.ru/2.0/vacancies/'
+#     header = {'X-Api-App-Id': SJ_KEY}
+#     for language in languages:
+#         salaries = []
+#         for page in count(0):
+#             params = {
+#                 'keyword': language,
+#                 'town': 'Москва',
+#                 'catalogues': 48,
+#                 'page': 0,
+#                 'count': 100
+#             }
+#             response = requests.get(url, headers=header, params=params)
+#             response.raise_for_status()
+#
+#             print(response.status_code)
+#
 
 
-print(get_sj_salary())
+
+print(get_hh_salary())
+# print(get_sj_salary())
