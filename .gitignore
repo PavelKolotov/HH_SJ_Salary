@@ -24,4 +24,5 @@ __pycache__
 .env
 .replit
 test.py
+test2.py
 .DS_Store
