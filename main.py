@@ -63,9 +63,10 @@ def get_salary_statistics_hh(languages):
             response = requests.get(url, headers=header, params=params)
             response.raise_for_status()
 
-            vacancies_found = response.json()['found']
-            vacancies = response.json()['items']
-            pages = response.json()['pages']
+            response = response.json()
+            vacancies_found = response['found']
+            vacancies = response['items']
+            pages = response['pages']
 
             for vacancy in vacancies:
                 salary = vacancy['salary']
@@ -112,15 +113,16 @@ def get_salary_statistics_sj(languages):
             response = requests.get(url, headers=header, params=params)
             response.raise_for_status()
 
-            vacancies = response.json()['objects']
-            vacancies_found = response.json()['total']
+            response = response.json()
+            vacancies = response['objects']
+            vacancies_found = response['total']
 
             for vacancy in vacancies:
                 avg_salary = predict_rub_salary(vacancy['payment_from'], vacancy['payment_to'])
                 if avg_salary:
                     salaries.append(avg_salary)
 
-            if not response.json()['more']:
+            if not response['more']:
                 break
 
         vacancies_processed = len(salaries)
