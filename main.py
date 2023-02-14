@@ -41,8 +41,8 @@ def predict_rub_salary(salary_from, salary_to):
 
 def preparation_for_table(salary):
     table_headers = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
-    for language, item in salary.items():
-        table_statistics = [language] + list(item.values())
+    for language, statistics in salary.items():
+        table_statistics = [language] + list(statistics.values())
         table_headers.append(table_statistics)
     return table_headers
 
