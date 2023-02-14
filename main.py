@@ -6,6 +6,11 @@ from itertools import count
 from terminaltables import AsciiTable
 
 
+SEARCH_PERIOD = 30
+CITY_CODE = 1
+JOB_ID = 48
+
+
 def main():
     languages = [
         'JavaScript',
@@ -51,8 +56,8 @@ def get_salary_statistics_hh(languages):
         for page in count(0):
             params = {
                 'text': language,
-                'period': 30,
-                'area': 1,
+                'period': SEARCH_PERIOD,
+                'area': CITY_CODE,
                 'page': page,
             }
             response = requests.get(url, headers=header, params=params)
@@ -99,7 +104,7 @@ def get_salary_statistics_sj(languages):
             params = {
                 'keyword': f'{language}',
                 'town': 'Москва',
-                'catalogues': 48,
+                'catalogues': JOB_ID,
                 'currency': 'rub',
                 'page': 0,
                 'count': 100
