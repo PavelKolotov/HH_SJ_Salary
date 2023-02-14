@@ -13,6 +13,7 @@ JOB_ID = 48
 
 def main():
     load_dotenv()
+    sj_key = os.environ['SJ_API_KEY']
     languages = [
         'JavaScript',
         'Java',
@@ -25,7 +26,7 @@ def main():
         'TypeScript'
     ]
     print(get_salary_statistics_hh(languages))
-    print(get_salary_statistics_sj(languages))
+    print(get_salary_statistics_sj(languages, sj_key))
 
 
 def predict_rub_salary(salary_from, salary_to):
@@ -94,8 +95,7 @@ def get_salary_statistics_hh(languages):
     return table_hh.table
 
 
-def get_salary_statistics_sj(languages):
-    sj_key = os.environ['SJ_API_KEY']
+def get_salary_statistics_sj(languages, sj_key):
     statistics = {}
     url = 'https://api.superjob.ru/2.0/vacancies/'
     header = {'X-Api-App-Id': sj_key}
