@@ -18,8 +18,8 @@ def main():
         'GO',
         'TypeScript'
     ]
-    print(get_hh_salary(languages))
-    print(get_sj_salary(languages))
+    print(get_salary_statistics_hh(languages))
+    print(get_salary_statistics_sj(languages))
 
 
 def predict_rub_salary(salary_from, salary_to):
@@ -42,7 +42,7 @@ def preparation_for_table(salary):
     return table_data
 
 
-def get_hh_salary(languages):
+def get_salary_statistics_hh(languages):
     result = {}
     url = 'https://api.hh.ru/vacancies/'
     header = {'User-Agent': 'PavelKolotov (kolotovbms@mail.ru)'}
@@ -86,7 +86,7 @@ def get_hh_salary(languages):
     return table_hh.table
 
 
-def get_sj_salary(languages):
+def get_salary_statistics_sj(languages):
     load_dotenv()
     sj_key = os.environ['SJ_API_KEY']
     result = {}
