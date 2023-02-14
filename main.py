@@ -82,13 +82,15 @@ def get_salary_statistics_hh(languages):
                 break
 
         vacancies_processed = len(salaries)
-        average_salary = int(sum(salaries) / vacancies_processed)
 
-        statistics[language] = {
-            'vacancies_found': vacancies_found,
-            'vacancies_processed': vacancies_processed,
-            'average_salary': average_salary
-        }
+        if vacancies_processed:
+            average_salary = int(sum(salaries) / vacancies_processed)
+
+            statistics[language] = {
+                'vacancies_found': vacancies_found,
+                'vacancies_processed': vacancies_processed,
+                'average_salary': average_salary
+            }
 
     print_salary = preparation_for_table(statistics)
     table_hh = AsciiTable(print_salary, 'HH Moscow')
