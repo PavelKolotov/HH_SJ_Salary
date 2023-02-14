@@ -12,6 +12,7 @@ JOB_ID = 48
 
 
 def main():
+    load_dotenv()
     languages = [
         'JavaScript',
         'Java',
@@ -94,7 +95,6 @@ def get_salary_statistics_hh(languages):
 
 
 def get_salary_statistics_sj(languages):
-    load_dotenv()
     sj_key = os.environ['SJ_API_KEY']
     statistics = {}
     url = 'https://api.superjob.ru/2.0/vacancies/'
