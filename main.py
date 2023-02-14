@@ -79,14 +79,15 @@ def get_salary_statistics_hh(languages):
             if page >= pages - 1:
                 break
 
-            vacancies_processed = len(salaries)
-            average_salary = int(sum(salaries) / vacancies_processed)
+        vacancies_processed = len(salaries)
+        average_salary = int(sum(salaries) / vacancies_processed)
+        print(vacancies_processed, salaries)
 
-            statistics[language] = {
-                'vacancies_found': vacancies_found,
-                'vacancies_processed': vacancies_processed,
-                'average_salary': average_salary
-            }
+        statistics[language] = {
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': vacancies_processed,
+            'average_salary': average_salary
+        }
 
     table_hh = AsciiTable(preparation_for_table(statistics), 'HH Moscow')
     return table_hh.table
