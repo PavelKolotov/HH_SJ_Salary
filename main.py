@@ -35,15 +35,15 @@ def predict_rub_salary(salary_from, salary_to):
 
 
 def preparation_for_table(salary):
-    table_data = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
+    table_headers = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
     for language, item in salary.items():
-        table_items = [language] + list(item.values())
-        table_data.append(table_items)
-    return table_data
+        table_statistics = [language] + list(item.values())
+        table_headers.append(table_statistics)
+    return table_headers
 
 
 def get_salary_statistics_hh(languages):
-    result = {}
+    statistics = {}
     url = 'https://api.hh.ru/vacancies/'
     header = {'User-Agent': 'PavelKolotov (kolotovbms@mail.ru)'}
     for language in languages:
@@ -76,20 +76,20 @@ def get_salary_statistics_hh(languages):
             vacancies_processed = len(salaries)
             average_salary = int(sum(salaries) / vacancies_processed)
 
-            result[language] = {
+            statistics[language] = {
                 'vacancies_found': vacancies_found,
                 'vacancies_processed': vacancies_processed,
                 'average_salary': average_salary
             }
 
-    table_hh = AsciiTable(preparation_for_table(result), 'HH Moscow')
+    table_hh = AsciiTable(preparation_for_table(statistics), 'HH Moscow')
     return table_hh.table
 
 
 def get_salary_statistics_sj(languages):
     load_dotenv()
     sj_key = os.environ['SJ_API_KEY']
-    result = {}
+    statistics = {}
     url = 'https://api.superjob.ru/2.0/vacancies/'
     header = {'X-Api-App-Id': sj_key}
     for language in languages:
@@ -124,12 +124,12 @@ def get_salary_statistics_sj(languages):
             average_salary = int(sum(salaries) / vacancies_processed)
 
         if vacancies_found:
-            result[language] = {
+            statistics[language] = {
                                 'vacancies_found': vacancies_found,
                                 'vacancies_processed': vacancies_processed,
                                 'average_salary': average_salary
                                 }
-        table_sj = AsciiTable(preparation_for_table(result), 'SuperJob Moscow')
+        table_sj = AsciiTable(preparation_for_table(statistics), 'SuperJob Moscow')
     return table_sj.table
 
 
