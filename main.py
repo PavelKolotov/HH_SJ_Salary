@@ -81,7 +81,6 @@ def get_salary_statistics_hh(languages):
 
         vacancies_processed = len(salaries)
         average_salary = int(sum(salaries) / vacancies_processed)
-        print(vacancies_processed, salaries)
 
         statistics[language] = {
             'vacancies_found': vacancies_found,
@@ -89,7 +88,8 @@ def get_salary_statistics_hh(languages):
             'average_salary': average_salary
         }
 
-    table_hh = AsciiTable(preparation_for_table(statistics), 'HH Moscow')
+    print_salary = preparation_for_table(statistics)
+    table_hh = AsciiTable(print_salary, 'HH Moscow')
     return table_hh.table
 
 
@@ -137,7 +137,8 @@ def get_salary_statistics_sj(languages):
                                 'vacancies_processed': vacancies_processed,
                                 'average_salary': average_salary
                                 }
-        table_sj = AsciiTable(preparation_for_table(statistics), 'SuperJob Moscow')
+        print_salary = preparation_for_table(statistics)
+        table_sj = AsciiTable(print_salary, 'SuperJob Moscow')
     return table_sj.table
 
 
