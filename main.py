@@ -25,8 +25,18 @@ def main():
         'GO',
         'TypeScript'
     ]
-    print(get_salary_statistics_hh(languages))
-    print(get_salary_statistics_sj(languages, sj_key))
+
+    hh_statistics = get_salary_statistics_hh(languages)
+    sj_statistics = get_salary_statistics_sj(languages, sj_key)
+
+    hh_table_data = get_preparation_for_table(hh_statistics)
+    sj_table_data = get_preparation_for_table(sj_statistics)
+
+    hh_table = get_average_salary_table(hh_table_data, 'HH Moscow')
+    sj_table = get_average_salary_table(sj_table_data, 'SuperJob Moscow')
+
+    print(hh_table)
+    print(sj_table)
 
 
 def predict_rub_salary(salary_from, salary_to):
@@ -41,16 +51,16 @@ def predict_rub_salary(salary_from, salary_to):
     return avg_salary
 
 
-def preparation_for_table(salary):
-    table_headers = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
+def get_preparation_for_table(salary):
+    table_data = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
     for language, statistics in salary.items():
         table_statistics = [language] + list(statistics.values())
-        table_headers.append(table_statistics)
-    return table_headers
+        table_data.append(table_statistics)
+    return table_data
 
 
 def get_salary_statistics_hh(languages):
-    statistics = {}
+    hh_statistics = {}
     url = 'https://api.hh.ru/vacancies/'
     header = {'User-Agent': 'PavelKolotov (kolotovbms@mail.ru)'}
     for language in languages:
@@ -85,20 +95,20 @@ def get_salary_statistics_hh(languages):
 
         if vacancies_processed:
             average_salary = int(sum(salaries) / vacancies_processed)
+        else:
+            average_salary = 0
 
-            statistics[language] = {
-                'vacancies_found': vacancies_found,
-                'vacancies_processed': vacancies_processed,
-                'average_salary': average_salary
-            }
+        hh_statistics[language] = {
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': vacancies_processed,
+            'average_salary': average_salary
+        }
 
-    print_salary = preparation_for_table(statistics)
-    table_hh = AsciiTable(print_salary, 'HH Moscow')
-    return table_hh.table
+    return hh_statistics
 
 
 def get_salary_statistics_sj(languages, sj_key):
-    statistics = {}
+    sj_statistics = {}
     url = 'https://api.superjob.ru/2.0/vacancies/'
     header = {'X-Api-App-Id': sj_key}
     for language in languages:
@@ -134,14 +144,19 @@ def get_salary_statistics_sj(languages, sj_key):
             average_salary = int(sum(salaries) / vacancies_processed)
 
         if vacancies_found:
-            statistics[language] = {
+            sj_statistics[language] = {
                                 'vacancies_found': vacancies_found,
                                 'vacancies_processed': vacancies_processed,
                                 'average_salary': average_salary
                                 }
-        print_salary = preparation_for_table(statistics)
-        table_sj = AsciiTable(print_salary, 'SuperJob Moscow')
-    return table_sj.table
+
+    return sj_statistics
+
+
+def get_average_salary_table(table_data, headers):
+    table_avg_salary = AsciiTable(table_data, headers)
+    return table_avg_salary.table
+
 
 
 if __name__ == "__main__":
