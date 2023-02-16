@@ -29,11 +29,8 @@ def main():
     hh_statistics = get_salary_statistics_hh(languages)
     sj_statistics = get_salary_statistics_sj(languages, sj_key)
 
-    hh_table_data = get_preparation_for_table(hh_statistics)
-    sj_table_data = get_preparation_for_table(sj_statistics)
-
-    hh_table = get_average_salary_table(hh_table_data, 'HH Moscow')
-    sj_table = get_average_salary_table(sj_table_data, 'SuperJob Moscow')
+    hh_table = get_prepare_table(hh_statistics, 'HH Moscow')
+    sj_table = get_prepare_table(sj_statistics, 'SuperJob Moscow')
 
     print(hh_table)
     print(sj_table)
@@ -51,12 +48,13 @@ def predict_rub_salary(salary_from, salary_to):
     return avg_salary
 
 
-def get_preparation_for_table(salary):
-    table_data = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
+def get_prepare_table(salary, header):
+    table = [["Язык", "Всего вакансий", "Использовано в расчете", "Средняя зарплата"], ]
     for language, statistics in salary.items():
         table_statistics = [language] + list(statistics.values())
-        table_data.append(table_statistics)
-    return table_data
+        table.append(table_statistics)
+    table_avg_salary = AsciiTable(table, header)
+    return table_avg_salary.table
 
 
 def get_salary_statistics_hh(languages):
@@ -151,12 +149,6 @@ def get_salary_statistics_sj(languages, sj_key):
                                 }
 
     return sj_statistics
-
-
-def get_average_salary_table(table_data, headers):
-    table_avg_salary = AsciiTable(table_data, headers)
-    return table_avg_salary.table
-
 
 
 if __name__ == "__main__":
